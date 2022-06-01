@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Instagram</string>
+    <string name="write_comment">Write comment</string>
+    <string name="add_comment">ADD COMMENT</string>
+    <string name="username">Username</string>
+    <string name="comment">Comment</string>
+    <string name="_01_01_2022">01/01/2022</string>
+    <string name="_0_likes">0 Likes</string>
+    <string name="caption">Caption</string>
+    <string name="save">SAVE</string>
+    <string name="enter_your_email">Type your Email</string>
+    <string name="enter_your_password">Type Your Password</string>
+    <string name="sign_in">Sign In</string>
+    <string name="not_registered_yet_sign_up">Not Registered Yet , Sign Up !</string>
+    <string name="again_type_your_password">Retype Your Password</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="already_registered_sign_in">Already Registered , Sign In !</string>
+    <string name="add_post">ADD POST</string>
+    <string name="enter_your_name">Type your name</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="reset_password">RESET PASSWORD</string>
+</resources>
