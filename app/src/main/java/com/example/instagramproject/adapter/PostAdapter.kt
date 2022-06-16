@@ -2,40 +2,38 @@ package com.example.instagramproject.adapter
 
 import android.content.Context
 import android.content.Intent
+import android.text.format.DateFormat
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.FirebaseAuth
-import android.view.LayoutInflater
-import com.bumptech.glide.Glide
-import android.text.format.DateFormat
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.instagramproject.R
 import com.example.instagramproject.model.Post
 import com.example.instagramproject.model.User
 import com.example.instagramproject.ui.CommentActivity
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.post.view.*
+import java.util.*
 import kotlin.collections.HashMap
-import java.util.Date;
 
 class PostAdapter(
-    private val context: Context,
-    private val postList: ArrayList<Post>,
-    private val usersList: ArrayList<User>,
+     val context: Context,
+     val postList: MutableList<Post>,
+     val usersList: MutableList<User>,
 ) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
-    private var firestore: FirebaseFirestore? = null
-    private var auth: FirebaseAuth? = null
+    private var firestore = FirebaseFirestore.getInstance()
+    private var auth = FirebaseAuth.getInstance()
 
     inner class PostViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
-        val view: View = LayoutInflater.from(context).inflate(R.layout.post, parent, false)
-        firestore = FirebaseFirestore.getInstance()
-        auth = FirebaseAuth.getInstance()
-        return PostViewHolder(view)
+        return PostViewHolder(LayoutInflater.from(context).inflate(R.layout.post, parent, false))
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
@@ -46,27 +44,20 @@ class PostAdapter(
 
         val milliseconds = post.time!!.time
         val date = DateFormat.format("MM/dd/yyyy", Date(milliseconds)).toString()
-        holder.itemView.date_tv.text=date
+        holder.itemView.date_tv.text = date
 
-        var username:String?=null
-        var image:String?=null
+        val user_name=usersList[position].name
+        val user_image=usersList[position].image
 
-        usersList[position].name?.let {
-            username=it;
-        }
-        usersList[position].image?.let {
-            image=it
-        }
+        Glide.with(context).load(user_image).into(holder.itemView.profile_pic)
 
-        Glide.with(context).load(image).into(holder.itemView.profile_pic)
-
-        holder.itemView.username_tv.text=username
+        holder.itemView.username_tv.text = user_name
 
         val postId = postList[position].PostId
         val currentUserId = auth!!.currentUser!!.uid
 
         holder.itemView.like_btn.setOnClickListener {
-            firestore!!.collection("Posts/" + postId+ "/Likes").document(currentUserId).get()
+            firestore!!.collection("Posts/" + postId + "/Likes").document(currentUserId).get()
                 .addOnCompleteListener { task ->
                     if (!task.result.exists()) {
                         val likesMap: MutableMap<String, Any> = HashMap()
@@ -83,9 +74,11 @@ class PostAdapter(
                 if (error == null) {
                     if (value!!.exists()) {
                         holder.itemView.like_btn
-                        holder.itemView.like_btn.setImageDrawable(context.getDrawable(R.drawable.ic_after_like))
+                        holder.itemView.like_btn.setImageDrawable(ContextCompat.getDrawable(context,
+                            R.drawable.ic_after_like))
                     } else {
-                        holder.itemView.like_btn.setImageDrawable(context.getDrawable(R.drawable.ic_before_like))
+                        holder.itemView.like_btn.setImageDrawable(ContextCompat.getDrawable(context,
+                            R.drawable.ic_before_like))
                     }
                 }
             }
@@ -94,9 +87,9 @@ class PostAdapter(
             if (error == null) {
                 if (!value!!.isEmpty) {
                     val count = value.size()
-                    holder.itemView.like_count_tv.text=count.toString()
+                    holder.itemView.like_count_tv.text = count.toString()
                 } else {
-                    holder.itemView.like_count_tv.text="0"
+                    holder.itemView.like_count_tv.text = "0"
                 }
             }
         }
@@ -108,8 +101,8 @@ class PostAdapter(
         }
 
         if (currentUserId == post.user) {
-            holder.itemView.delete_btn.visibility=View.VISIBLE
-            holder.itemView.delete_btn.isClickable=true
+            holder.itemView.delete_btn.visibility = View.VISIBLE
+            holder.itemView.delete_btn.isClickable = true
             holder.itemView.delete_btn.setOnClickListener {
                 val alert = AlertDialog.Builder(context)
                 alert.setTitle("DELETE")
@@ -119,18 +112,21 @@ class PostAdapter(
                         firestore!!.collection("Posts/" + postId + "/Comments").get()
                             .addOnCompleteListener { task ->
                                 for (snapshot in task.result) {
-                                    firestore!!.collection("Posts/" + postId + "/Comments").document(snapshot.id).delete()
+                                    firestore!!.collection("Posts/" + postId + "/Comments")
+                                        .document(snapshot.id).delete()
                                 }
                             }
                         firestore!!.collection("Posts/" + postId + "/Likes").get()
                             .addOnCompleteListener { task ->
                                 for (snapshot in task.result) {
-                                    firestore!!.collection("Posts/" + postId + "/Likes").document(snapshot.id).delete()
+                                    firestore!!.collection("Posts/" + postId + "/Likes")
+                                        .document(snapshot.id).delete()
                                 }
                             }
                         firestore!!.collection("Posts").document(postId!!).delete()
-                        postList.drop(position)
-                        notifyDataSetChanged()
+                        postList.removeAt(position)
+                        notifyItemRemoved(position)
+                        notifyItemRangeChanged(position, postList.size)
                     }
                 alert.show()
             }

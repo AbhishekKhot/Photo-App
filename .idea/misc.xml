@@ -3,6 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/All Android Projects/instagramproject/app/src/main/res/layout/activity_comment.xml" value="0.17552083333333332" />
+        <entry key="..\:/All Android Projects/instagramproject/app/src/main/res/layout/activity_forgot_password.xml" value="0.17552083333333332" />
+        <entry key="..\:/All Android Projects/instagramproject/app/src/main/res/layout/activity_main.xml" value="0.17552083333333332" />
+        <entry key="..\:/All Android Projects/instagramproject/app/src/main/res/layout/activity_post.xml" value="0.17552083333333332" />
+        <entry key="..\:/All Android Projects/instagramproject/app/src/main/res/layout/activity_profile.xml" value="0.17552083333333332" />
+        <entry key="..\:/All Android Projects/instagramproject/app/src/main/res/layout/activity_sign_in.xml" value="0.17552083333333332" />
+        <entry key="..\:/All Android Projects/instagramproject/app/src/main/res/layout/activity_sign_up.xml" value="0.17552083333333332" />
+        <entry key="..\:/All Android Projects/instagramproject/app/src/main/res/layout/post.xml" value="0.17552083333333332" />
         <entry key="..\:/instagramproject/app/src/main/res/drawable-v24/button_background.xml" value="0.19166666666666668" />
         <entry key="..\:/instagramproject/app/src/main/res/drawable-v24/edit_text_background.xml" value="0.19166666666666668" />
         <entry key="..\:/instagramproject/app/src/main/res/drawable-v24/ic_baseline_account_circle_24.xml" value="0.19166666666666668" />
